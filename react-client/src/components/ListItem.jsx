@@ -2,7 +2,8 @@ import React from 'react';
 
 const ListItem = (props) => (
   <div>
-    { props.item.description }
+  <h4>Inside listItem component</h4>
+  <p>{props.item.name} { props.item.description }</p>
   </div>
 )
 
