@@ -34,7 +34,7 @@ var Image = mongoose.model('Image', imageSchema);
 //   }
 // })
 
-var save = function(images) {
+module.exports.save = function(images) {
   return Promise.all(images.map((img) => {
     
     var query = {id: img.id};
@@ -57,7 +57,7 @@ var save = function(images) {
   })
 };
 
-var select10 = function(callback) {
+module.exports.select10 = function() {
   return Image.find({}).limit(10).exec()
   .then((result) => {
     console.log('success in selecting all: ', result);
@@ -75,5 +75,3 @@ var select10 = function(callback) {
   //   }
   // });
 };
-
-module.exports.save = save;

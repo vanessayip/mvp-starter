@@ -28,7 +28,7 @@ app.post('/images', function (req, res) {
   });
 });
 
-app.get('/items', function (req, res) {
+app.get('/images', function (req, res) {
   return db.select10()
   .then((result) => {
     console.log('done retrieving from db: ', result);

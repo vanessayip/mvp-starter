@@ -12,7 +12,9 @@ module.exports.getImages = function (term) {
     },
     qs: {
       fields: 'display_set',
-      // fields: ['detail_set', 'display_set'] need to figure out how to make arrays work here
+      fields: ['detail_set', 'display_set'] 
+      fields: JSON.stringify(fieldsArray), 
+      // need to figure out how to make arrays work here
       phrase: term,
       embed_content_only: true,
       exclude_nudity: true,
