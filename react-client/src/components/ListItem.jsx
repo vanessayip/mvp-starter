@@ -4,6 +4,30 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {GridList, GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import StarFilled from 'material-ui/svg-icons/action/grade';
+import ToggleIcon from 'material-ui-toggle-icon';
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: '', 
+      images: []
+    }
+    this.search = this.search.bind(this);
+    this.onChange = this.onChange.bind(this);
+  }
+}
+ 
+<IconButton
+  onClick={() => setState({ on: !state.on })}
+>
+  <ToggleIcon
+    on={state.on}
+    onIcon={<StarFilled />}
+    offIcon={<StarBorder/>}
+  />
+</IconButton>
 
 const ListItem = (props) => (
   <GridTile
