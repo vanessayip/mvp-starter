@@ -7,13 +7,13 @@ class List extends React.Component {
   }
   
   render () {
-    const stuff = this.props.items.map((item, i) => 
-      <ListItem key={i} item={item}/>
+    const stuff = this.props.images.map((img, i) => 
+      <ListItem key={i} img={img}/>
     );
     return (
       <div>
         <h4> List Component </h4>
-        There are { this.props.items.length } items.
+        There are { this.props.images.length } images.
         {stuff}
       </div> 
     )

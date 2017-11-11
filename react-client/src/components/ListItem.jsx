@@ -3,7 +3,8 @@ import React from 'react';
 const ListItem = (props) => (
   <div>
   <h4>Inside listItem component</h4>
-  <p>{props.item.name} { props.item.description }</p>
+  <p> id: {props.img.id} </p>
+  <p> url: { props.img.thumbnail }</p>
   </div>
 )
 

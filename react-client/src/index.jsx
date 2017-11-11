@@ -8,7 +8,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       value: '', 
-      items: [{name: 'bob', description: 'says hello world'}]
+      images: [{id: 12345, thumbnail: 'www.url.com/thumbnail'}]
     }
     this.search = this.search.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -21,11 +21,11 @@ class App extends React.Component {
       url:'/images',
       method: 'POST',
       contentType: 'application/json',
-      data: {searchTerm: this.state.value}
+      data: JSON.stringify({searchTerm: this.state.value})
     })
     .done((results) => {
       console.log('inside done of search ajax: ', results);
-      //set state for images to trigger rerender
+      this.setState({images: results});
     })
     .fail((err) => {
       console.log('inside fail of search ajax: ', err);
@@ -36,21 +36,19 @@ class App extends React.Component {
     this.setState({
       value: e.target.value
     });
-    // console.log('value was changed: ', this.state.value)
   }
   
   componentDidMount() {
-    // $.ajax({
-    //   url: '/items', 
-    //   success: (data) => {
-    //     this.setState({
-    //       items: data
-    //     })
-    //   },
-    //   error: (err) => {
-    //     console.log('err', err);
-    //   }
-    // });
+    $.ajax({
+      url: '/images'
+    })
+    .done((results) => {
+      console.log('inside success componentDidMount: ', results);
+      this.setState({images: results});
+    })
+    .fail((err) => {
+      console.log('inside fail of componentDidMount: ', err);
+    });
   }
 
   render () {
@@ -63,7 +61,7 @@ class App extends React.Component {
         </label>
         <button type="submit">Submit</button>
       </form>
-      <List items={this.state.items}/>
+      <List images={this.state.images}/>
     </div>)
   }
 }
