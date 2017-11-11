@@ -12,9 +12,7 @@ module.exports.getImages = function (term) {
     },
     qs: {
       fields: 'display_set',
-      fields: ['detail_set', 'display_set'] 
-      fields: JSON.stringify(fieldsArray), 
-      // need to figure out how to make arrays work here
+      fields: 'detail_set', //fields is originally an array, but need to separate it out like this b/c these get appended to the url
       phrase: term,
       embed_content_only: true,
       exclude_nudity: true,
@@ -22,7 +20,6 @@ module.exports.getImages = function (term) {
       page_size: 10,
       sort_order: 'most_popular' 
     },
-    // qsStringifyOptions: {arrayFormat: 'brackets'} 
   })
   .then((res) => {
     // console.log('after get to api, res.body: ', res.body);
@@ -30,21 +27,18 @@ module.exports.getImages = function (term) {
     let collection = [];
     // console.log('parsebody', parsedBody.images);
     for (var img of parsedBody.images) {
-      // let image = {
-      //   id: img.id,
-      //   caption: img.caption,
-      //   title: img.title,
-      //   city: img.city,
-      //   country: img.country,
-      //   state_province: img.state_province
-      // }
       let image = {
         id: img.id,
+        caption: img.caption,
+        title: img.title,
+        city: img.city,
+        country: img.country,
+        state_province: img.state_province,
         thumbnail: img.display_sizes[2].uri
       }
       collection.push(image);
     }
-    // console.log('collection: ', collection)
+    console.log('collection: ', collection)
     return Promise.resolve(collection);
   })
   // .then((collection) => {

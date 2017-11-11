@@ -16,23 +16,15 @@ db.once('open', function() {
 
 var imageSchema = mongoose.Schema({
   id: {type: Number, unique: true},
-  thumbnail: String
+  thumbnail: String,
+  caption: String,
+  title: String,
+  city: String,
+  country: String,
+  state_province: String
 });
 
 var Image = mongoose.model('Image', imageSchema);
-
-// var newImage = new Image({
-//   id: 123,
-//   thumbnail: 'www.url.com/thumbnail/hi'
-// });
-
-// newImage.save(function(err, results) {
-//   if (err) {
-//     console.log('error on save: ', err)
-//   } else {
-//     console.log('success on save: ', results);
-//   }
-// })
 
 module.exports.save = function(images) {
   return Promise.all(images.map((img) => {
@@ -40,6 +32,12 @@ module.exports.save = function(images) {
     var query = {id: img.id};
     var update = {
       id: img.id,
+      thumbnail: img.thumbnail,
+      caption: img.caption,
+      title: img.title,
+      city: img.city,
+      country: img.country,
+      state_province: img.state_province,
       thumbnail: img.thumbnail
     };
     var options = {upsert: true};
@@ -66,12 +64,4 @@ module.exports.select10 = function() {
   .catch((err) => {
     console.log('not able to select all: ', err);
   })
-  
-  // Image.find({}, function(err, Images) {
-  //   if(err) {
-  //     callback(err, null);
-  //   } else {
-  //     callback(null, Images);
-  //   }
-  // });
 };

@@ -1,5 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import TextField from 'material-ui/TextField';
+import SearchBar from 'material-ui-search-bar'
 import $ from 'jquery';
 import List from './components/List.jsx';
 
@@ -8,14 +12,14 @@ class App extends React.Component {
     super(props);
     this.state = {
       value: '', 
-      images: [{id: 12345, thumbnail: 'www.url.com/thumbnail'}]
+      images: []
     }
     this.search = this.search.bind(this);
     this.onChange = this.onChange.bind(this);
   }
   
   search(e) {
-    e.preventDefault(); //need this b/c submit will refresh page
+    // e.preventDefault(); //need this b/c submit will refresh page
     console.log('inside search, value is: ', this.state.value);
     $.ajax({
       url:'/images',
@@ -25,7 +29,7 @@ class App extends React.Component {
     })
     .done((results) => {
       console.log('inside done of search ajax: ', results);
-      this.setState({images: results});
+      this.setState({images: results, value: ''});
     })
     .fail((err) => {
       console.log('inside fail of search ajax: ', err);
@@ -34,8 +38,12 @@ class App extends React.Component {
 
   onChange(e) {
     this.setState({
-      value: e.target.value
+      value: e
     });
+    //don't need this way anymore if using react
+    // this.setState({
+    //   value: e.target.value
+    // });
   }
   
   componentDidMount() {
@@ -52,18 +60,32 @@ class App extends React.Component {
   }
 
   render () {
-    return (<div>
-      <h1>Item List</h1>
-      <form onSubmit={this.search}>
-        <label>
-          Search:
-          <input type='text' value={this.state.value} onChange={this.onChange}/>
-        </label>
-        <button type="submit">Submit</button>
-      </form>
-      <List images={this.state.images}/>
-    </div>)
+    return (
+      <MuiThemeProvider>
+        <div>
+        <h1>Bucket List</h1>
+        <SearchBar
+          value = {this.state.value}
+          onChange = {this.onChange}
+          onRequestSearch = {this.search}
+          hintText = 'eg. parks in Toronto'
+          style={{
+            margin: '0 auto',
+            maxWidth: 800
+          }}
+        />
+        <br></br>
+        <List images={this.state.images}/>
+      </div>
+    </MuiThemeProvider>)
   }
 }
 
 ReactDOM.render(<App />, document.getElementById('app'));
+        // <form onSubmit={this.search}>
+        //   <label>
+        //     Search:
+        //     <input type='text' value={this.state.value} onChange={this.onChange}/>
+        //   </label>
+        //   <button type="submit">Submit</button>
+        // </form>
