@@ -16,6 +16,7 @@ class App extends React.Component {
     }
     this.search = this.search.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.updateStar = this.updateStar.bind(this);
   }
   
   search(e) {
@@ -46,6 +47,23 @@ class App extends React.Component {
     // });
   }
   
+  updateStar(isStarred, imgID) {
+    console.log('inside updateStar, star is: ', isStarred);
+    $.ajax({
+      url:'/starred',
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({toogleStar: isStarred, id: imgID})
+    })
+    .done((results) => {
+      console.log('inside done of updateStar ajax: ', results);
+      // this.setState({images: results, value: ''});
+    })
+    .fail((err) => {
+      console.log('inside fail of updateStar ajax: ', err);
+    });    
+  }
+
   componentDidMount() {
     $.ajax({
       url: '/images'
@@ -75,7 +93,7 @@ class App extends React.Component {
           }}
         />
         <br></br>
-        <List images={this.state.images}/>
+        <List images={this.state.images} updateStar = {this.updateStar}/>
       </div>
     </MuiThemeProvider>)
   }

@@ -15,17 +15,30 @@ app.post('/images', function (req, res) {
   
   return ghetty.getImages('harbourfront toronto')
   .then((images) => {
-    console.log('images inside post: ', images);
+    // console.log('images inside post: ', images);
     // res.send(images);
     return db.save(images)
   })
   .then((result) => {
-    console.log('done updating the db: ', result);
+    // console.log('done updating the db: ', result);
     res.send(result);
   })
   .catch((err) => {
     console.log('error in getting images for post: ', err);
   });
+});
+
+app.post('/starred', function (req, res) {
+  console.log('inside post of starred: ', req.body);
+  return db.updateStar(req.body.toogleStar, req.body.id)
+  .then((result) => {
+    console.log('done updating the db from star: ', result);
+    res.send(result);
+  })
+  .catch((err) => {
+    console.log('error in getting images for post from star: ', err);
+  });
+
 });
 
 app.get('/images', function (req, res) {

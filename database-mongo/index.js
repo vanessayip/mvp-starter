@@ -21,7 +21,8 @@ var imageSchema = mongoose.Schema({
   title: String,
   city: String,
   country: String,
-  state_province: String
+  state_province: String,
+  starred: Boolean
 });
 
 var Image = mongoose.model('Image', imageSchema);
@@ -65,3 +66,16 @@ module.exports.select10 = function() {
     console.log('not able to select all: ', err);
   })
 };
+
+module.exports.update = function (starValue, id) {
+  var query = {id: id}
+  var update = {starred: starValue}
+
+  return Image.findOneAndUpdate(query, update).exec()
+  .then((result) => {
+    console.log('success in inserting new star value into db: ', result);
+  })
+  .catch((err) => {
+    console.log('couldnt update: ', err);
+  })
+}

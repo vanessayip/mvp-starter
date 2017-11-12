@@ -24,7 +24,7 @@ class List extends React.Component {
   
   render () {
     const stuff = this.props.images.map((img, i) => 
-      <ListItem key={img.id} img={img}/>
+      <ListItem key={img.id} img={img} updateStar = {this.props.updateStar}/>
     );
     return (
       <div style={styles.root}>
