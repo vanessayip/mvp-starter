@@ -12,6 +12,7 @@ module.exports.getImages = function (term) {
     },
     qs: {
       fields: 'display_set',
+      fields: 'date_camera_shot',
       fields: 'detail_set', //fields is originally an array, but need to separate it out like this b/c these get appended to the url
       phrase: term,
       embed_content_only: true,
@@ -25,7 +26,7 @@ module.exports.getImages = function (term) {
     // console.log('after get to api, res.body: ', res.body);
     let parsedBody = JSON.parse(res.body);
     let collection = [];
-    // console.log('parsebody', parsedBody.images);
+    console.log('parsebody', parsedBody.images);
     for (var img of parsedBody.images) {
       let image = {
         id: img.id,
@@ -34,7 +35,8 @@ module.exports.getImages = function (term) {
         city: img.city,
         country: img.country,
         state_province: img.state_province,
-        thumbnail: img.display_sizes[2].uri
+        thumbnail: img.display_sizes[2].uri,
+        date_created: img.date_created
       }
       collection.push(image);
     }

@@ -3,9 +3,23 @@ import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TextField from 'material-ui/TextField';
-import SearchBar from 'material-ui-search-bar'
+import SearchBar from 'material-ui-search-bar';
+import {Tabs, Tab} from 'material-ui/Tabs';
+import FontIcon from 'material-ui/FontIcon';
+import {lightBlue50} from 'material-ui/styles/colors';
+import StarFilled from 'material-ui/svg-icons/action/grade';
+import Home from 'material-ui/svg-icons/action/home';
 import $ from 'jquery';
 import List from './components/List.jsx';
+
+const styles = {
+  headline: {
+    fontSize: 24,
+    paddingTop: 16,
+    marginBottom: 12,
+    fontWeight: 400,
+  },
+};
 
 class App extends React.Component {
   constructor(props) {
@@ -76,24 +90,41 @@ class App extends React.Component {
       console.log('inside fail of componentDidMount: ', err);
     });
   }
-
+  
   render () {
     return (
       <MuiThemeProvider>
         <div>
         <h1>Bucket List</h1>
-        <SearchBar
-          value = {this.state.value}
-          onChange = {this.onChange}
-          onRequestSearch = {this.search}
-          hintText = 'eg. parks in Toronto'
-          style={{
-            margin: '0 auto',
-            maxWidth: 800
-          }}
-        />
-        <br></br>
-        <List images={this.state.images} updateStar = {this.updateStar}/>
+        <Tabs>
+          <Tab icon = { 
+            <Home />
+            } >
+            <div>
+              <SearchBar
+                value = {this.state.value}
+                onChange = {this.onChange}
+                onRequestSearch = {this.search}
+                hintText = 'eg. parks in Toronto'
+                style={{
+                  margin: '0 auto',
+                  maxWidth: 800
+                }}
+              />
+              <br></br>
+              <List images={this.state.images} updateStar = {this.updateStar}/>
+
+            </div>
+          </Tab>
+          <Tab icon = {
+            <StarFilled fill="white" /> 
+          }>
+            <div>
+            Starred ones will show up here
+            </div>
+          </Tab>
+        </Tabs>
+
       </div>
     </MuiThemeProvider>)
   }
