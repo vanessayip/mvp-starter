@@ -41,10 +41,10 @@ app.get('/images', function (req, res) {
 app.post('/starred', function (req, res) {
   console.log('inside post of starred: ', req.body);
   return db.updateStar(req.body.toogleStar, req.body.id)
-  .then((result) => {
-    console.log('done updating the db from star: ', result);
-    return db.select10();
-  })
+  // .then((result) => {
+  //   console.log('done updating the db from star: ', result);
+  //   return db.select10();
+  // })
   .then((result) => {
     console.log('done retrieving starred from db: ', result);
     res.send(result);

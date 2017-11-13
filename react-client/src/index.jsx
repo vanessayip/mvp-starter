@@ -69,7 +69,14 @@ class App extends React.Component {
     })
     .done((results) => {
       console.log('inside done of updateStar ajax: ', results);
-      this.setState({images: results});
+      let newImages = this.state.images.slice();
+      newImages.forEach((image) => {
+        if (image.id === img.id) {
+          image.starred = !img.starred;
+          // console.log(image)
+        }
+      });
+      this.setState({images: newImages});
     })
     .fail((err) => {
       console.log('inside fail of updateStar ajax: ', err);
@@ -94,7 +101,8 @@ class App extends React.Component {
     let starredImgs = this.state.images.filter(img => {
         return img.starred;
       });
-
+    // console.log('all images')
+    // console.log(this.state.images)
     return (
       <MuiThemeProvider>
         <div>

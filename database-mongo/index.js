@@ -23,7 +23,8 @@ var imageSchema = mongoose.Schema({
   country: String,
   state_province: String,
   starred: Boolean,
-  date_created: {type: Date, default: Date.now}
+  date_created: Date,
+  date_added: {type: Date, default: Date.now}
 });
 
 var Image = mongoose.model('Image', imageSchema);
@@ -60,7 +61,7 @@ module.exports.save = function(images) {
 };
 
 module.exports.select10 = function() {
-  return Image.find({}).limit(10).sort({date_created: -1}).exec()
+  return Image.find({}).limit(10).sort({date_added: -1, date_created: -1}).exec()
   .then((result) => {
     console.log('success in selecting all: ', result);
     return result;
@@ -88,6 +89,7 @@ module.exports.updateStar = function (starValue, id) {
   return Image.findOneAndUpdate(query, update).exec()
   .then((result) => {
     console.log('success in inserting new star value into db: ', result);
+    return result;
   })
   .catch((err) => {
     console.log('couldnt update: ', err);
