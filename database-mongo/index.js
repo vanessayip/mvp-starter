@@ -23,7 +23,7 @@ var imageSchema = mongoose.Schema({
   country: String,
   state_province: String,
   starred: Boolean,
-  date_created: Date
+  date_created: {type: Date, default: Date.now}
 });
 
 var Image = mongoose.model('Image', imageSchema);
@@ -70,16 +70,16 @@ module.exports.select10 = function() {
   })
 };
 
-module.exports.selectStar = function() {
-  return Image.find({starred: true}).limit(10).sort({date_created: -1}).exec()
-  .then((result) => {
-    console.log('success in selecting starred: ', result);
-    return result;
-  })
-  .catch((err) => {
-    console.log('not able to select all: ', err);
-  })
-};
+// module.exports.selectStar = function() {
+//   return Image.find({starred: true}).limit(10).sort({date_created: -1}).exec()
+//   .then((result) => {
+//     console.log('success in selecting starred: ', result);
+//     return result;
+//   })
+//   .catch((err) => {
+//     console.log('not able to select all: ', err);
+//   })
+// };
 
 module.exports.updateStar = function (starValue, id) {
   var query = {id: id}

@@ -6,7 +6,6 @@ import TextField from 'material-ui/TextField';
 import SearchBar from 'material-ui-search-bar';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import FontIcon from 'material-ui/FontIcon';
-import {lightBlue50} from 'material-ui/styles/colors';
 import StarFilled from 'material-ui/svg-icons/action/grade';
 import Home from 'material-ui/svg-icons/action/home';
 import $ from 'jquery';
@@ -26,17 +25,14 @@ class App extends React.Component {
     super(props);
     this.state = {
       value: '', 
-      images: [],
-      starredImages: []
+      images: []
     }
     this.search = this.search.bind(this);
     this.onChange = this.onChange.bind(this);
     this.updateStar = this.updateStar.bind(this);
-    // this.loadStar = this.loadStar.bind(this);
   }
   
   search(e) {
-    // e.preventDefault(); //need this b/c submit will refresh page
     console.log('inside search, value is: ', this.state.value);
     $.ajax({
       url:'/images',
@@ -57,7 +53,7 @@ class App extends React.Component {
     this.setState({
       value: e
     });
-    //don't need this way anymore if using react
+    //don't need this way anymore if using materialui
     // this.setState({
     //   value: e.target.value
     // });
@@ -95,6 +91,10 @@ class App extends React.Component {
   }
   
   render () {
+    let starredImgs = this.state.images.filter(img => {
+        return img.starred;
+      });
+
     return (
       <MuiThemeProvider>
         <div>
@@ -109,22 +109,27 @@ class App extends React.Component {
                 onChange = {this.onChange}
                 onRequestSearch = {this.search}
                 hintText = 'eg. parks in Toronto'
-                style={{
+                style = {{
                   margin: '0 auto',
                   maxWidth: 700
                 }}
               />
               <br></br>
-              <List images={this.state.images} showStarsOnly={false} updateStar = {this.updateStar}/>
+              <List 
+                images = {this.state.images}
+                updateStar = {this.updateStar}
+              />
 
             </div>
           </Tab>
           <Tab icon = {
-            <StarFilled fill="white" /> 
+            <StarFilled /> 
           }>
             <div>
-            Starred ones will show up here
-            <List images={this.state.images} showStarsOnly={true} updateStar = {this.updateStar}/>
+            <List 
+              images={starredImgs} 
+              updateStar = {this.updateStar}
+            />
             </div>
           </Tab>
         </Tabs>
@@ -135,10 +140,3 @@ class App extends React.Component {
 }
 
 ReactDOM.render(<App />, document.getElementById('app'));
-        // <form onSubmit={this.search}>
-        //   <label>
-        //     Search:
-        //     <input type='text' value={this.state.value} onChange={this.onChange}/>
-        //   </label>
-        //   <button type="submit">Submit</button>
-        // </form>

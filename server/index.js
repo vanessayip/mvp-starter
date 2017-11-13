@@ -12,7 +12,7 @@ app.use(express.static(__dirname + '/../react-client/dist'));
 app.post('/images', function (req, res) {
   console.log('inside post, req.body: ', req.body);
   
-  return ghetty.getImages('harbourfront toronto')
+  return ghetty.getImages(req.body.searchTerm)
   .then((images) => {
     // console.log('images inside post: ', images);
     // res.send(images);
