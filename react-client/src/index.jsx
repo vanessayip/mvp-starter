@@ -25,7 +25,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       value: '', 
-      images: []
+      images: [],
+      starredImages: []
     }
     this.search = this.search.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -89,8 +90,16 @@ class App extends React.Component {
       url: '/images'
     })
     .done((results) => {
-      console.log('inside success componentDidMount: ', results);
+      console.log('inside success componentDidMount for fetching images: ', results);
       this.setState({images: results});
+    })
+    // .then(() => 
+    //     $.ajax({
+    //     url: '/starred'
+    // }))
+    .done((results) => {
+      console.log('inside success componentDidMount for fetching starred: ', results);
+      this.setState({starredImages: results});
     })
     .fail((err) => {
       console.log('inside fail of componentDidMount: ', err);
@@ -101,8 +110,6 @@ class App extends React.Component {
     let starredImgs = this.state.images.filter(img => {
         return img.starred;
       });
-    // console.log('all images')
-    // console.log(this.state.images)
     return (
       <MuiThemeProvider>
         <div>

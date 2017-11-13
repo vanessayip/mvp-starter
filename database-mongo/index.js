@@ -33,7 +33,7 @@ module.exports.save = function(images) {
   return Promise.all(images.map((img) => {
 
     var query = {id: img.id};
-    var update = {
+    var newImage = {
       id: img.id,
       thumbnail: img.thumbnail,
       caption: img.caption,
@@ -45,23 +45,55 @@ module.exports.save = function(images) {
       date_created: img.date_created,
       starred: img.starred
     };
-    var options = {upsert: true};
-    
-    return Image.findOneAndUpdate(query, update, options).exec()
+    // var options = {upsert: true};
+    //
+    // find(update) 
+
+    // if found
+    //  then put found into searchResults
+    // else
+    //   insert new image into db
+    //   put new image into search searchResults
+    // end
+
+    // return searchResults
+    ///
+
+
+    return Image.findOne(query).exec()
     .then((result) => {
-      console.log('success in inserting new image into db: ', result);
+      console.log('loook here *********')
+      console.log(result);
+      if (!result) {
+        console.log('no result, please enter into db')
+        return Image.create(newImage)
+        .then((result) => {
+          console.log('successfully inserted into db') 
+        })
+        .catch((err) => {
+          console.log('error insert one into db')
+        })
+      }
+      // console.log('success in inserting new image into db: ', result);
     })
     .catch((err) => {
-      console.log('duplicate entry: ', err);
+      console.log('error using find one : ', err);
     })
   }))
   .then(() => {
-    return images;
+    var imgIds = [];
+    for (var img of images) {
+      imgIds.push(img.id);
+    }
+    console.log('imgIds: ', imgIds)
+    return imgIds;
   })
 };
 
-module.exports.select10 = function() {
-  return Image.find({}).limit(10).sort({date_added: -1, date_created: -1}).exec()
+module.exports.select10 = function(criteria) {
+  var query = criteria || {};
+
+  return Image.find(query).limit(10).sort({date_added: -1, date_created: -1}).exec()
   .then((result) => {
     console.log('success in selecting all: ', result);
     return result;

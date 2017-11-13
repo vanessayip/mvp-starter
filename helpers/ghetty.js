@@ -26,7 +26,7 @@ module.exports.getImages = function (term) {
     // console.log('after get to api, res.body: ', res.body);
     let parsedBody = JSON.parse(res.body);
     let collection = [];
-    console.log('parsebody', parsedBody.images);
+    // console.log('parsebody', parsedBody.images);
     for (var img of parsedBody.images) {
       let image = {
         id: img.id,
@@ -41,7 +41,7 @@ module.exports.getImages = function (term) {
       }
       collection.push(image);
     }
-    console.log('collection: ', collection)
+    // console.log('collection: ', collection)
     return Promise.resolve(collection);
   })
   // .then((collection) => {

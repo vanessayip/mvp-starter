@@ -18,8 +18,14 @@ app.post('/images', function (req, res) {
     // res.send(images);
     return db.save(images)
   })
+  //take in img ids, query db with ids
+  //return results to send back to client
+  .then((imgIds) => {
+    console.log('finding images after saving to db')
+    return db.select10({id: {$in: imgIds}})
+  })
   .then((result) => {
-    // console.log('done updating the db: ', result);
+    console.log('done updating the db: ', result);
     res.send(result);
   })
   .catch((err) => {
@@ -49,6 +55,17 @@ app.post('/starred', function (req, res) {
     console.log('error in getting images for post from star: ', err);
   });
 
+});
+
+app.get('/starred', function (req, res) {
+  return db.select10({starred: true})
+  .then((result) => {
+    console.log('done retrieving from db: ', result);
+    res.send(result);
+  })
+  .catch((err) => {
+    console.log('error in retrieving from db: ', err);
+  });
 });
 
 app.listen(3000, function() {
