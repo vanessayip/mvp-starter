@@ -11,37 +11,38 @@ import ToggleIcon from 'material-ui-toggle-icon';
 class ListItem extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isStarred: false
-    };
-    this.onClick = this.onClick.bind(this);
+    // this.state = {
+    //   isStarred: props.img.starred
+    // };
+    // this.onClickStar = this.onClickStar.bind(this);
   }
 
-  onClick() {
-    //set state is async, so if waiting for the setstate to finish, put logic in component did update
-    this.setState({
-      isStarred: !this.state.isStarred
-    })
-  }
+  // onClickStar() {
+  //   //set state is async, so if waiting for the setstate to finish, put logic in component did update
+  //   this.setState({
+  //     isStarred: !this.state.isStarred
+  //   })
+  // }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.isStarred !== prevState.isStarred) { 
-      console.log('inside click after starred changed to: ', this.state.isStarred, this.props.img.id);
-      this.props.updateStar(this.state.isStarred, this.props.img.id);
-    }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.state.isStarred !== prevState.isStarred) { 
+  //     console.log('inside click after starred changed to: ', this.state.isStarred, this.props.img.id);
+  //     this.props.updateStar(this.state.isStarred, this.props.img.id);
+  //   }
+  // }
   render () {
     return (
       <GridTile
         title = {this.props.img.caption}
         actionIcon = {
           <IconButton
-            onClick = {this.onClick}
+            onClick = {this.props.updateStar.bind(null, this.props.img)}
           >
             <ToggleIcon
-              on = {this.state.isStarred}
-              onIcon = { <StarFilled fill="white" /> }
-              offIcon = { <StarBorder color="white"/> }
+              on = {this.props.img.starred}
+              color={'white'}
+              onIcon = { <StarFilled /> }
+              offIcon = { <StarBorder /> }
             />
           </IconButton>
         }

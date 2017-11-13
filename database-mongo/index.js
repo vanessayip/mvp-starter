@@ -30,7 +30,7 @@ var Image = mongoose.model('Image', imageSchema);
 
 module.exports.save = function(images) {
   return Promise.all(images.map((img) => {
-    
+
     var query = {id: img.id};
     var update = {
       id: img.id,
@@ -41,7 +41,8 @@ module.exports.save = function(images) {
       country: img.country,
       state_province: img.state_province,
       thumbnail: img.thumbnail,
-      date_created: img.date_created
+      date_created: img.date_created,
+      starred: img.starred
     };
     var options = {upsert: true};
     
@@ -62,6 +63,17 @@ module.exports.select10 = function() {
   return Image.find({}).limit(10).sort({date_created: -1}).exec()
   .then((result) => {
     console.log('success in selecting all: ', result);
+    return result;
+  })
+  .catch((err) => {
+    console.log('not able to select all: ', err);
+  })
+};
+
+module.exports.selectStar = function() {
+  return Image.find({starred: true}).limit(10).sort({date_created: -1}).exec()
+  .then((result) => {
+    console.log('success in selecting starred: ', result);
     return result;
   })
   .catch((err) => {

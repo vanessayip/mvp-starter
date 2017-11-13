@@ -30,13 +30,14 @@ module.exports.getImages = function (term) {
     for (var img of parsedBody.images) {
       let image = {
         id: img.id,
-        caption: img.caption,
+        caption: img.caption || 'no caption',
         title: img.title,
         city: img.city,
         country: img.country,
         state_province: img.state_province,
         thumbnail: img.display_sizes[2].uri,
-        date_created: img.date_created
+        date_created: img.date_created,
+        starred: false
       }
       collection.push(image);
     }

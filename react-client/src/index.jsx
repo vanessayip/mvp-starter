@@ -26,11 +26,13 @@ class App extends React.Component {
     super(props);
     this.state = {
       value: '', 
-      images: []
+      images: [],
+      starredImages: []
     }
     this.search = this.search.bind(this);
     this.onChange = this.onChange.bind(this);
     this.updateStar = this.updateStar.bind(this);
+    // this.loadStar = this.loadStar.bind(this);
   }
   
   search(e) {
@@ -61,22 +63,23 @@ class App extends React.Component {
     // });
   }
   
-  updateStar(isStarred, imgID) {
-    console.log('inside updateStar, star is: ', isStarred);
+  updateStar(img) {
+    console.log('inside updateStar, old star is: ', img.starred);
     $.ajax({
       url:'/starred',
       method: 'POST',
       contentType: 'application/json',
-      data: JSON.stringify({toogleStar: isStarred, id: imgID})
+      data: JSON.stringify({toogleStar: !img.starred, id: img.id})
     })
     .done((results) => {
       console.log('inside done of updateStar ajax: ', results);
-      // this.setState({images: results, value: ''});
+      this.setState({images: results});
     })
     .fail((err) => {
       console.log('inside fail of updateStar ajax: ', err);
     });    
   }
+
 
   componentDidMount() {
     $.ajax({
@@ -108,11 +111,11 @@ class App extends React.Component {
                 hintText = 'eg. parks in Toronto'
                 style={{
                   margin: '0 auto',
-                  maxWidth: 800
+                  maxWidth: 700
                 }}
               />
               <br></br>
-              <List images={this.state.images} updateStar = {this.updateStar}/>
+              <List images={this.state.images} showStarsOnly={false} updateStar = {this.updateStar}/>
 
             </div>
           </Tab>
@@ -121,6 +124,7 @@ class App extends React.Component {
           }>
             <div>
             Starred ones will show up here
+            <List images={this.state.images} showStarsOnly={true} updateStar = {this.updateStar}/>
             </div>
           </Tab>
         </Tabs>

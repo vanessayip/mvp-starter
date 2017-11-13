@@ -5,7 +5,6 @@ var bodyParser = require('body-parser');
 var db = require('../database-mongo/index.js');
 var ghetty = require('../helpers/ghetty.js');
 
-
 app.use(bodyParser.json());
 
 app.use(express.static(__dirname + '/../react-client/dist'));
@@ -28,19 +27,6 @@ app.post('/images', function (req, res) {
   });
 });
 
-app.post('/starred', function (req, res) {
-  console.log('inside post of starred: ', req.body);
-  return db.updateStar(req.body.toogleStar, req.body.id)
-  .then((result) => {
-    console.log('done updating the db from star: ', result);
-    res.send(result);
-  })
-  .catch((err) => {
-    console.log('error in getting images for post from star: ', err);
-  });
-
-});
-
 app.get('/images', function (req, res) {
   return db.select10()
   .then((result) => {
@@ -50,14 +36,35 @@ app.get('/images', function (req, res) {
   .catch((err) => {
     console.log('error in retrieving from db: ', err);
   });
-    // function(err, data) {
-    // if(err) {
-    //   res.sendStatus(500);
-    // } else {
-    //   res.json(data);
-    // }
-  // });
 });
+
+app.post('/starred', function (req, res) {
+  console.log('inside post of starred: ', req.body);
+  return db.updateStar(req.body.toogleStar, req.body.id)
+  .then((result) => {
+    console.log('done updating the db from star: ', result);
+    return db.select10();
+  })
+  .then((result) => {
+    console.log('done retrieving starred from db: ', result);
+    res.send(result);
+  })
+  .catch((err) => {
+    console.log('error in getting images for post from star: ', err);
+  });
+
+});
+
+// app.get('/loadStar', function (req, res) {
+//   return db.selectStar()
+//   .then((result) => {
+//     console.log('done retrieving from db: ', result);
+//     // res.send(result);
+//   })
+//   .catch((err) => {
+//     console.log('error in retrieving from db: ', err);
+//   });
+// });
 
 app.listen(3000, function() {
   console.log('listening on port 3000!');
