@@ -68,16 +68,29 @@ class App extends React.Component {
       contentType: 'application/json',
       data: JSON.stringify({toogleStar: !img.starred, id: img.id})
     })
-    .done((results) => {
-      console.log('inside done of updateStar ajax: ', results);
+    .done((result) => {
+      console.log('inside done of updateStar *********: ', result);
       let newImages = this.state.images.slice();
+      let newStarredImages = this.state.starredImages.slice();
       newImages.forEach((image) => {
         if (image.id === img.id) {
           image.starred = !img.starred;
           // console.log(image)
         }
       });
-      this.setState({images: newImages});
+
+      if (result.starred) {// if result.starred is true, add to newStarred
+        newStarredImages.push(result)
+      } else { //result.starred is false, meaning we want to remove it
+        newStarredImages = newStarredImages.filter( (image) => {
+          return image.id !== result.id;
+        });
+      }
+      
+      this.setState({
+        images: newImages,
+        starredImages: newStarredImages,
+      });
     })
     .fail((err) => {
       console.log('inside fail of updateStar ajax: ', err);
@@ -92,24 +105,27 @@ class App extends React.Component {
     .done((results) => {
       console.log('inside success componentDidMount for fetching images: ', results);
       this.setState({images: results});
-    })
-    // .then(() => 
-    //     $.ajax({
-    //     url: '/starred'
-    // }))
-    .done((results) => {
-      console.log('inside success componentDidMount for fetching starred: ', results);
-      this.setState({starredImages: results});
+      $.ajax({
+        url: '/starred'
+      })
+      .done((results) => {
+        console.log('inside success componentDidMount for fetching starred: ', results);
+        this.setState({starredImages: results});
+      })
+      .fail((err) => {
+        console.log('inside fail of componentDidMount for searching starred: ', err);
+      });
     })
     .fail((err) => {
       console.log('inside fail of componentDidMount: ', err);
     });
+
   }
   
   render () {
-    let starredImgs = this.state.images.filter(img => {
-        return img.starred;
-      });
+    // let starredImgs = this.state.images.filter(img => {
+    //     return img.starred;
+    //   });
     return (
       <MuiThemeProvider>
         <div>
@@ -142,7 +158,7 @@ class App extends React.Component {
           }>
             <div>
             <List 
-              images={starredImgs} 
+              images={this.state.starredImages} 
               updateStar = {this.updateStar}
             />
             </div>

@@ -33,7 +33,7 @@ module.exports.save = function(images) {
   return Promise.all(images.map((img) => {
 
     var query = {id: img.id};
-    var newImage = {
+    var newImage = new Image({
       id: img.id,
       thumbnail: img.thumbnail,
       caption: img.caption,
@@ -44,7 +44,7 @@ module.exports.save = function(images) {
       thumbnail: img.thumbnail,
       date_created: img.date_created,
       starred: img.starred
-    };
+    });
     // var options = {upsert: true};
     //
     // find(update) 
@@ -66,7 +66,7 @@ module.exports.save = function(images) {
       console.log(result);
       if (!result) {
         console.log('no result, please enter into db')
-        return Image.create(newImage)
+        return newImage.save()
         .then((result) => {
           console.log('successfully inserted into db') 
         })
@@ -120,8 +120,12 @@ module.exports.updateStar = function (starValue, id) {
 
   return Image.findOneAndUpdate(query, update).exec()
   .then((result) => {
-    console.log('success in inserting new star value into db: ', result);
-    return result;
+    return Image.findOne({ id: result.id }).exec()
+    .then((result) => {    
+      console.log('success in finding newly changed star value in db: ', result);
+      return result;
+    })
+    // return result;
   })
   .catch((err) => {
     console.log('couldnt update: ', err);
